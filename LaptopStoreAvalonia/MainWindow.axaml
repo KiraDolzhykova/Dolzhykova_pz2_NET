@@ -1,0 +1,271 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="LaptopStoreAvalonia.MainWindow"
+        x:DataType="local:MainWindow"
+        Title="LaptopStoreAvalonia" Width="800" Height="450"
+        xmlns:local="clr-namespace:LaptopStoreAvalonia"
+        x:CompileBindings="true">
+
+
+    <DockPanel>
+        <!-- <StackPanel DockPanel.Dock="Left" Width="200" Background="#F5F5F5">
+            <TextBlock Text="Навігація" Margin="10" FontWeight="Bold" FontSize="16"/>
+            <Button Content="Виробники" Name="ManufacturesButton" Click="NavigateToManufactures" Margin="10" />
+            <Button Content="Товари" Name="ProductsButton" Click="NavigateToProducts" Margin="10" />
+            <Button Content="Клієнти" Name="CustomersButton" Click="NavigateToCustomers" Margin="10" />
+            <Button Content="Замовлення" Name="OrdersButton" Click="NavigateToOrders" Margin="10" />
+        </StackPanel> -->
+
+        <TabControl Name="MainTabControl">
+            <TabItem Header="Продукти">
+                <StackPanel>
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Додавання нових товарів</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="ProductName" Watermark="Назва продукту" Width="200" Margin="5" />
+                        <TextBox Name="ProductPrice" Watermark="Ціна продукту" Width="100" Margin="5" />
+                        <ComboBox Name="ManufactureComboBox" Margin="5" SelectedItem="{Binding SelectedManufacture}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="local:Manufacture">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Content="Додати" Click="AddProduct_Click" Margin="5" />
+                    </StackPanel>
+
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Фільтрація</TextBlock>
+                    <!-- Фільтрація й пошук -->
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="FilterProductName" Watermark="Назва товару" Width="200" Margin="5" />
+                        <TextBox Name="FilterMinPrice" Watermark="Мін. ціна" Width="100" Margin="5" />
+                        <TextBox Name="FilterMaxPrice" Watermark="Макс. ціна" Width="100" Margin="5" />
+                        <Button Content="Застосувати фільтр" Click="ApplyProductFilter_Click" Margin="5" />
+                        <Button Content="Скинути фільтр" Click="ResetProductFilter_Click" Margin="5" />
+                    </StackPanel>
+
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Пошук</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="SearchProductField" Watermark="Пошук товарів" Width="300" Margin="5" />
+                        <Button Content="Знайти" Click="SearchProduct_Click" Margin="5" />
+                    </StackPanel>
+
+                    <DataGrid ItemsSource="{Binding Products}" Name="ProductsGrid" IsReadOnly="False" GridLinesVisibility="All" AutoGenerateColumns="False" Margin="5">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ProductId}"/>
+                            <DataGridTextColumn Header="Назва товару" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Виробник" Binding="{Binding Manufacture.Name}"/>
+                            <DataGridTextColumn Header="Ціна" Binding="{Binding Price}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="Редагувати" Click="EditProduct_Click" Margin="5" />
+                        <Button Content="Оновити" Click="UpdateProduct_Click" Margin="5" />
+                        <Button Content="Видалити" Click="DeleteProduct_Click" Margin="5" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Клієнти">
+                <StackPanel>
+                    <!-- Фільтрація й пошук -->
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Додавання нових покупців</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="CustomerName" Watermark="Покупець" Width="200" Margin="5" />
+                        <TextBox Name="CustomerEmail" Watermark="E-mail покупця" Width="200" Margin="5" />
+                        <TextBox Name="CustomerPhone" Watermark="Номер телефону покупця" Width="200" Margin="5" />
+                        <Button Content="Додати" Click="AddCustomer_Click" Margin="5" />
+                    </StackPanel>
+
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Фільтрація</TextBlock>
+                    <!-- Фільтрація й пошук -->
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="FilterCustomerName" Watermark="Покупець" Width="200" Margin="5" />
+                        <Button Content="Застосувати фільтр" Click="ApplyCustomerFilter_Click" Margin="5" />
+                        <Button Content="Скинути фільтр" Click="ResetCustomerFilter_Click" Margin="5" />
+                    </StackPanel>
+
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Пошук</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="SearchCustomerField" Watermark="Пошук покупців" Width="300" Margin="5" />
+                        <Button Content="Знайти" Click="SearchCustomer_Click" Margin="5" />
+                    </StackPanel>
+                    
+                    <DataGrid ItemsSource="{Binding Customers}" Name="CustomersGrid" IsReadOnly="False" GridLinesVisibility="All" AutoGenerateColumns="False" Margin="5">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding CustomerId}"/>
+                            <DataGridTextColumn Header="Покупець" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Електрона пошта" Binding="{Binding Email}"/>
+                            <DataGridTextColumn Header="Номер телефону" Binding="{Binding Phone}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="Редагувати" Click="EditCustomer_Click" Margin="5" />
+                        <Button Content="Оновити" Click="UpdateCustomer_Click" Margin="5" />
+                        <Button Content="Видалити" Click="DeleteCustomer_Click" Margin="5" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Виробники">
+                <StackPanel>
+                    <!-- Фільтрація й пошук -->
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Додавання нових компаній виробників</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="ManufactureName" Watermark="Виробник" Width="200" Margin="5" />
+                        <TextBox Name="ManufactureCountry" Watermark="Країна виробник" Width="200" Margin="5" />
+                        <Button Content="Додати" Click="AddManufacture_Click" Margin="5" />
+                    </StackPanel>
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Фільтрація</TextBlock>
+                    <!-- Фільтрація й пошук -->
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="FilterManufactureName" Watermark="Виробник" Width="200" Margin="5" />
+                        <TextBox Name="FilterManufactureCountry" Watermark="Країна виробника" Width="200" Margin="5" />
+                        <Button Content="Застосувати фільтр" Click="ApplyManufactureFilter_Click" Margin="5" />
+                        <Button Content="Скинути фільтр" Click="ResetManufactureFilter_Click" Margin="5" />
+                    </StackPanel>
+
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Пошук</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="SearchManufactureField" Watermark="Пошук виробників" Width="300" Margin="5" />
+                        <Button Content="Знайти" Click="SearchManufacture_Click" Margin="5" />
+                    </StackPanel>
+                    <DataGrid ItemsSource="{Binding Manufactures}" Name="ManufacturesGrid" IsReadOnly="False" GridLinesVisibility="All" AutoGenerateColumns="False" Margin="5" Height="200">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding ManufactureId}"/>
+                            <DataGridTextColumn Header="Виробник" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Країна виробника" Binding="{Binding Country}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="Редагувати" Click="EditManufacture_Click" Margin="5" />
+                        <Button Content="Оновити" Click="UpdateManufacture_Click" Margin="5" />
+                        <Button Content="Видалити" Click="DeleteManufacture_Click" Margin="5" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Замовлення">
+                <StackPanel>
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Додавання нових замовлень</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="OrderDate" Watermark="Дата замовлення" Width="200" Margin="5" />
+                        <TextBox Name="OrderQuantity" Watermark="Кількість продукту" Width="100" Margin="5" />
+                        <ComboBox Name="CustomerComboBox" Margin="5" SelectedItem="{Binding SelectedCustomer}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="local:Customer">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox Name="ProductComboBox" Margin="5" SelectedItem="{Binding SelectedProduct}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="local:Product">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Content="Додати" Click="AddOrder_Click" Margin="5" />
+                    </StackPanel>
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Фільтрація</TextBlock>
+                    <!-- Фільтрація й пошук -->
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="FilterOrderDate" Watermark="Дата замовлення" Width="200" Margin="5" />
+                        <TextBox Name="FilterQuantity" Watermark="Кількість товару" Width="100" Margin="5" />
+                        <TextBox Name="FilterOrderMinTotalPrice" Watermark="Мін. загальна ціна" Width="100" Margin="5" />
+                        <TextBox Name="FilterOrderMaxTotalPrice" Watermark="Макс. загальна ціна" Width="100" Margin="5" />
+                        <TextBox Name="FilterOrderCustomerName" Watermark="Покупець" Width="200" Margin="5" />
+                        <TextBox Name="FilterOrderProductName" Watermark="Назва продукту" Width="200" Margin="5" />
+                        <Button Content="Застосувати фільтр" Click="ApplyOrderFilter_Click" Margin="5" />
+                        <Button Content="Скинути фільтр" Click="ResetOrderFilters_Click" Margin="5" />
+                    </StackPanel>
+                    <TextBlock Margin="20 5" FontSize="18" FontWeight="Bold">Пошук</TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBox Name="SearchOrderField" Watermark="Пошук замовлення" Width="300" Margin="5" />
+                        <Button Content="Знайти" Click="SearchOrder_Click" Margin="5" />
+                    </StackPanel>
+                    <DataGrid ItemsSource="{Binding Orders}" Name="OrdersGrid" IsReadOnly="False" GridLinesVisibility="All" AutoGenerateColumns="False" Margin="5">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding OrderId}"/>
+                            <DataGridTextColumn Header="Дата замовлення" Binding="{Binding OrderDate}"/>
+                            <DataGridTextColumn Header="Кількість товару" Binding="{Binding Quantity}"/>
+                            <DataGridTextColumn Header="Назва товару" Binding="{Binding Product.Name}"/>
+                            <DataGridTextColumn Header="Покупець" Binding="{Binding Customer.Name}"/>
+                            <DataGridTextColumn Header="Загальна ціна" Binding="{Binding TotalPrice}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                        <Button Content="Додати" Click="AddOrder_Click" Margin="5" />
+                        <Button Content="Редагувати" Click="EditOrder_Click" Margin="5" />
+                        <Button Content="Оновити" Click="UpdateOrder_Click" Margin="5" />
+                        <Button Content="Видалити" Click="DeleteOrder_Click" Margin="5" />
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        
+
+    <!-- <StackPanel>
+        <TextBlock Text="Виробники" Margin="5"/>
+        <TextBox Name="ManufactureName" Watermark="Виробник" Margin="5"/>
+        <TextBox Name="ManufactureCountry" Watermark="Країна виробник" Margin="5"/>
+        <Button Content="Додати виробника" Click="AddManufacture_Click" Margin="5"/>
+        <Button Content="Редагувати виробника" Click="EditManufacture_Click" Margin="5"/>
+        <Button Content="Оновити виробника" Click="UpdateManufacture_Click" Margin="5"/>
+        <Button Content="Видалити виробника" Click="DeleteManufacture_Click" Margin="5"/>
+        <DataGrid Name="ManufacturesGrid" AutoGenerateColumns="True" Margin="5"/>
+
+        <TextBlock Text="Продукти" Margin="5"/>
+        Випадаючий список для вибору виробника
+        <ComboBox Name="ManufactureComboBox" Margin="5" SelectedItem="{Binding SelectedManufacture}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="local:Manufacture">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBox Name="ProductName" Watermark="Назва товару" Margin="5"/> 
+        <TextBox Name="ProductPrice" Watermark="Ціна товару" Margin="5"/>
+        <Button Content="Додати продукт" Click="AddProduct_Click" Margin="5"/>
+        
+        <TextBlock Text="Покупці" Margin="5"/>
+        <TextBox Name="CustomerName" Watermark="Ім'я клієнта" Margin="5"/> 
+        <TextBox Name="CustomerEmail" Watermark="Email клієнта" Margin="5"/> 
+        <TextBox Name="CustomerPhone" Watermark="Телефон клієнта" Margin="5"/> 
+        <Button Content="Додати клієнта" Click="AddCustomer_Click" Margin="5"/>
+        
+        <TextBlock Text="Замовлення" Margin="5"/>
+        <ComboBox Name="CustomerComboBox" Margin="5" SelectedItem="{Binding SelectedCustomer}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="local:Customer">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+        Випадаючий список для вибору продукту
+        <ComboBox Name="ProductComboBox" Margin="5" SelectedItem="{Binding SelectedProduct}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="local:Product">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <TextBox Name="OrderQuantity" Watermark="Кількість товару" Margin="5"/>
+        <TextBox Name="OrderDate" Watermark="Дата замовлення" Margin="5"/> 
+        <Button Content="Додати замовлення" Click="AddOrder_Click" Margin="5"/> 
+
+        <DataGrid Name="ProductsGrid" AutoGenerateColumns="True" Margin="5"/> 
+        <DataGrid Name="CustomersGrid" AutoGenerateColumns="True" Margin="5"/> 
+        <DataGrid Name="OrdersGrid" AutoGenerateColumns="True" Margin="5"/> 
+        <DataGrid Name="ManufacturesGrid" AutoGenerateColumns="True" Margin="5"/>-->
+        <StackPanel>
+            <Popup Name="MessagePopup" IsOpen="False" Placement="Bottom" VerticalOffset="10">
+                <Border Name="MessagePopupBorder" Background="Green" Padding="10">
+                    <TextBlock Name="PopupMessage" Foreground="White" />
+                </Border>
+            </Popup>
+        </StackPanel>
+    </DockPanel>
+</Window>
